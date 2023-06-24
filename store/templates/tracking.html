@@ -1,0 +1,108 @@
+{% extends 'header.html' %}{% block extra %}
+<div class="container">
+  <div class="col">
+    <h2>Track your Orders</h2>
+  </div>
+  <form method="post" action="#" id="trackform">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="orderId">Order Id:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="orderId"
+          placeholder=""
+          name="orderId"
+          required
+        />
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      style="width: 15%; text-align: center; margin-left: 15px"
+    >
+      Track Order
+    </button>
+  </form>
+  <hr />
+
+  <div class="col">
+    <h2>View your order status</h2>
+    <div>
+      <ul class="list-group" id="items"></ul>
+    </div>
+  </div>
+</div>
+<script>
+  if (localStorage.getItem("cart") == null) {
+    var cart = {};
+  } else {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    console.log(cart);
+  }
+  $("#trackform").submit(function (event) {
+    $(".items").empty();
+    var formData = {
+      orderId: $("input[name=orderId]").val(),
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/store/orderTracker/",
+      data: formData,
+      encode: true,
+    }).done(function (data) {
+      console.log(data);
+      updates = JSON.parse(data);
+      if ((updates.length > 0) & (updates != {})) {
+        for (i = 0; i < updates.length; i++) {
+          let time = updates[i]["time"];
+          let text = updates[i]["text"];
+          str = `<li class="list-group-item d-flex justify-content-between align-items-center">${text}<span class="badge bg-primary rounded-pill">${time}</span></li>`;
+          $("#items").append(str);
+        }
+      } else {
+        str = `<li class="list-group-item d-flex justify-content-between align-items-center">Sorry no records found`;
+        $("#items").append(str);
+      }
+    });
+    event.preventDefault();
+  });
+  var $j = jQuery.noConflict();
+  $j(document).ready(function () {
+    $j('[data-toggle="popover"]').popover();
+  });
+
+  $j("#popoverCart").popover({ html: true, sanitize: false });
+  function updatePopover(cart) {
+    var popStr = "";
+    popStr = popStr + "<div>";
+    for (var item in cart) {
+      a = item.slice(2);
+      if (cart[item][0] != 0) {
+        popStr += cart[item][1] + " Qty:" + cart[item][0] + "<br>";
+      }
+    }
+    popStr +=
+      "<hr></div> <a href='/store/checkout'><button class='btn btn-primary' id='checkout'>Checkout</button></a> <br><button class='btn btn-primary' id='clearCart' style='margin-top:6px' onclick='clearCart()'>Clear Cart</button>";
+
+    document.getElementById("popoverCart").setAttribute("data-content", popStr);
+  }
+  if (localStorage.getItem("cart") == null) {
+    var cart = {};
+  } else {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    var sum = 0;
+    for (var item in cart) {
+      sum += cart[item][0];
+    }
+    document.getElementById("navCart").innerHTML = sum;
+    // updateCart(cart);
+    updatePopover(cart);
+    $j("#popoverCart").popover("hide");
+  }
+</script>
+{% endblock extra %}

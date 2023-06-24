@@ -1,0 +1,14 @@
+.container {
+  align-items: center;
+  text-align: center;
+}
+.form {
+  height: 400px;
+  padding: 25px;
+  font-size: large;
+}
+h2 {
+  text-align: center;
+  font-size: xx-large;
+}
+

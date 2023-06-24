@@ -1,0 +1,221 @@
+{% extends 'header.html' %}{% block extra %}
+<div class="container">
+  <div class="col">
+    <h2>Review your cart items</h2>
+    <div>
+      <ul class="list-group" id="items"></ul>
+    </div>
+  </div>
+  <hr />
+  <div class="col my-5">
+    <h2>Shipping info</h2>
+    <form method="post" action="/store/checkout/">
+      {% csrf_token %}
+      <input type="hidden" name="itemsJSON" id="itemsJSON" />
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Enter your Name"
+            name="name"
+            required
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="phone">Contact no.</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            name="phone"
+            placeholder="8888888888"
+            pattern="[0-9]{10}"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="address1">Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="address1"
+            id="address1"
+            placeholder="1234 Main St"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="address2">Address 2</label>
+          <input
+            type="text"
+            class="form-control"
+            id="address2"
+            name="address2"
+            placeholder="Apartment, studio, or floor"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-5">
+          <label for="city">City</label>
+          <input
+            type="text"
+            class="form-control"
+            id="city"
+            name="city"
+            required
+          />
+        </div>
+        <div class="form-group col-md-5">
+          <label for="state">State</label>
+          <input
+            type="text"
+            class="form-control"
+            id="state"
+            name="state"
+            required
+          />
+        </div>
+        <div class="form-group col-md-2">
+          <label for="zip">Zip</label>
+          <input
+            type="text"
+            class="form-control"
+            id="zip"
+            name="zip"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-group col-md-12">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="gridCheck"
+            required
+          />
+          <label class="form-check-label" for="gridCheck">
+            Agree to <a href="">Terms and Conditions</a>
+          </label>
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        style="width: 15%; text-align: center; margin-left: 15px"
+        onclick="func()"
+      >
+        Confirm Order
+      </button>
+    </form>
+  </div>
+  <hr />
+</div>
+<script>
+  if (localStorage.getItem("cart") == null) {
+    var cart = {};
+  } else {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    console.log(cart);
+  }
+  sum = 0;
+  if ($.isEmptyObject(cart)) {
+    str = "Cart is Empty... Please add some items to continue further..";
+  } else {
+    for (var item in cart) {
+      let name = cart[item][1];
+      let qty = cart[item][0];
+      sum += qty;
+      str = `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-primary rounded-pill">${qty}</span></li>`;
+      $("#items").append(str);
+    }
+  }
+  $("#itemsJSON").val(JSON.stringify(cart));
+  function func() {
+    alert(
+      "Thanks for ordering with us....Your id is {{orders.order_id}} use it to track your order"
+    );
+  }
+  var $j = jQuery.noConflict();
+  $j(document).ready(function () {
+    $j('[data-toggle="popover"]').popover();
+  });
+
+  $j("#popoverCart").popover({ html: true, sanitize: false });
+  function updateCart(cart, id) {
+    for (var item in cart) {
+      if (id in cart) {
+        document.getElementById("div" + id).innerHTML =
+          "<button id='minus" +
+          item +
+          "' class='btn btn-primary minus' style='margin-bottom: 10px'>-</button> <span id='val" +
+          item +
+          "' style='margin-bottom: 10px'>" +
+          cart[item][0] +
+          "</span> <button id='plus" +
+          item +
+          "' class='btn btn-primary plus' style='margin-bottom: 10px'>+</button>";
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    var sum = 0;
+    for (var item in cart) {
+      sum += cart[item][0];
+    }
+    document.getElementById("navCart").innerHTML = sum;
+  }
+  function clearCart(idstr) {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    for (var item in cart) {
+      if (idstr in cart) {
+        document.getElementById("div" + item).innerHTML =
+          '<button id="' +
+          idstr +
+          '" class="btn btn-primary plus" style="margin-bottom: 10px">Add to Cart</button>';
+      }
+    }
+    localStorage.clear();
+    cart = {};
+    updateCart(cart);
+  }
+  function updatePopover(cart) {
+    var popStr = "";
+    popStr = popStr + "<div>";
+    for (var item in cart) {
+      a = item.slice(2);
+      if (cart[item][0] != 0) {
+        popStr += cart[item][1] + " Qty:" + cart[item][0] + "<br>";
+      }
+    }
+    popStr +=
+      "<hr></div> <a href='/store/checkout'><button class='btn btn-primary' id='checkout'>Checkout</button></a> <br><button class='btn btn-primary' id='clearCart' style='margin-top:6px' onclick='clearCart()'>Clear Cart</button>";
+
+    document.getElementById("popoverCart").setAttribute("data-content", popStr);
+  }
+  if (localStorage.getItem("cart") == null) {
+    var cart = {};
+  } else {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    var sum = 0;
+    for (var item in cart) {
+      sum += cart[item][0];
+    }
+    document.getElementById("navCart").innerHTML = sum;
+    // updateCart(cart);
+    updatePopover(cart);
+    $j("#popoverCart").popover("hide");
+  }
+  // document.getElementById("cart").innerHTML = sum;
+
+  // localStorage.clear();
+</script>
+{% endblock extra %}
