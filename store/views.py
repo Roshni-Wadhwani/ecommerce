@@ -140,17 +140,21 @@ def orderTrack(request):
         # print(orderId)
         try:
             orders = order.objects.filter(order_id=orderid)
+            # print("orders:", orders)
             if len(orders) > 0:
                 update = orderTracker.objects.filter(orderId=orderid)
                 updates = []
                 for item in update:
                     updates.append(
                         {'text': item.updateDesc, 'time': item.timestamp})
-                    response = json.dumps(updates, default=str)
+                    # print("first: "+orders[0].items_json)
+                    response = json.dumps(
+                        [updates, orders[0].items_json], default=str)
                 return HttpResponse(response)
             else:
                 return HttpResponse('{}')
-        except Exception as e:
+        except Exception as exception:
+            # print(exception)
             return HttpResponse("exception")
 
     return render(request, '../templates/tracking.html')

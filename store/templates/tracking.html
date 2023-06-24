@@ -14,15 +14,13 @@
           id="orderId"
           placeholder=""
           name="orderId"
-          required
-        />
+          required />
       </div>
     </div>
     <button
       type="submit"
       class="btn btn-primary"
-      style="width: 15%; text-align: center; margin-left: 15px"
-    >
+      style="width: 15%; text-align: center; margin-left: 15px">
       Track Order
     </button>
   </form>
@@ -32,6 +30,12 @@
     <h2>View your order status</h2>
     <div>
       <ul class="list-group" id="items"></ul>
+    </div>
+  </div>
+  <div class="col">
+    <h2>View your orders</h2>
+    <div>
+      <ul class="list-group" id="citems"></ul>
     </div>
   </div>
 </div>
@@ -55,8 +59,11 @@
       data: formData,
       encode: true,
     }).done(function (data) {
-      console.log(data);
-      updates = JSON.parse(data);
+      console.log("initial", data);
+      data = JSON.parse(data);
+      console.log("final:", data);
+      updates = data[0];
+      console.log("updates: ", updates);
       if ((updates.length > 0) & (updates != {})) {
         for (i = 0; i < updates.length; i++) {
           let time = updates[i]["time"];
@@ -67,6 +74,16 @@
       } else {
         str = `<li class="list-group-item d-flex justify-content-between align-items-center">Sorry no records found`;
         $("#items").append(str);
+      }
+      // fill order details
+      cart = JSON.parse(data[1]);
+      console.log("cart: ", cart);
+      for (var item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum += qty;
+        str = `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-primary rounded-pill">${qty}</span></li>`;
+        $("#citems").append(str);
       }
     });
     event.preventDefault();

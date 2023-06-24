@@ -6,6 +6,9 @@
       <ul class="list-group" id="items"></ul>
     </div>
   </div>
+  <span
+    class="list-group-item list-group-item-action list-group-item-info"
+    id="finalPrice"></span>
   <hr />
   <div class="col my-5">
     <h2>Shipping info</h2>
@@ -21,8 +24,7 @@
             id="name"
             placeholder="Enter your Name"
             name="name"
-            required
-          />
+            required />
         </div>
         <div class="form-group col-md-6">
           <label for="phone">Contact no.</label>
@@ -33,8 +35,7 @@
             name="phone"
             placeholder="8888888888"
             pattern="[0-9]{10}"
-            required
-          />
+            required />
         </div>
       </div>
       <div class="form-row">
@@ -46,8 +47,7 @@
             name="address1"
             id="address1"
             placeholder="1234 Main St"
-            required
-          />
+            required />
         </div>
       </div>
 
@@ -59,8 +59,7 @@
             class="form-control"
             id="address2"
             name="address2"
-            placeholder="Apartment, studio, or floor"
-          />
+            placeholder="Apartment, studio, or floor" />
         </div>
       </div>
       <div class="form-row">
@@ -71,8 +70,7 @@
             class="form-control"
             id="city"
             name="city"
-            required
-          />
+            required />
         </div>
         <div class="form-group col-md-5">
           <label for="state">State</label>
@@ -81,8 +79,7 @@
             class="form-control"
             id="state"
             name="state"
-            required
-          />
+            required />
         </div>
         <div class="form-group col-md-2">
           <label for="zip">Zip</label>
@@ -91,8 +88,7 @@
             class="form-control"
             id="zip"
             name="zip"
-            required
-          />
+            required />
         </div>
       </div>
       <div class="form-group col-md-12">
@@ -101,8 +97,7 @@
             class="form-check-input"
             type="checkbox"
             id="gridCheck"
-            required
-          />
+            required />
           <label class="form-check-label" for="gridCheck">
             Agree to <a href="">Terms and Conditions</a>
           </label>
@@ -112,8 +107,8 @@
         type="submit"
         class="btn btn-primary"
         style="width: 15%; text-align: center; margin-left: 15px"
-        onclick="func()"
-      >
+        id="submitButton"
+        onclick="func()">
         Confirm Order
       </button>
     </form>
@@ -127,23 +122,35 @@
     cart = JSON.parse(localStorage.getItem("cart"));
     console.log(cart);
   }
-  sum = 0;
+  var sum = 0;
+  var totalPrice = 0;
   if ($.isEmptyObject(cart)) {
     str = "Cart is Empty... Please add some items to continue further..";
   } else {
     for (var item in cart) {
       let name = cart[item][1];
       let qty = cart[item][0];
+      let price = cart[item][2];
       sum += qty;
-      str = `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-primary rounded-pill">${qty}</span></li>`;
+      totalPrice += qty * price;
+      str = `${
+        qty != 0
+          ? `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-primary rounded-pill">${qty}</span></li>`
+          : ""
+      }`;
+
       $("#items").append(str);
     }
   }
+  document.getElementById("finalPrice").innerHTML =
+    "Total amount to be paid: Rs." + totalPrice;
   $("#itemsJSON").val(JSON.stringify(cart));
   function func() {
-    alert(
-      "Thanks for ordering with us....Your id is {{orders.order_id}} use it to track your order"
-    );
+    document.getElementById("gridCheck").checked
+      ? alert(
+          "Thanks for ordering with us....Your id is {{orders}} use it to track your order"
+        )
+      : alert("Please read terms and conditions");
   }
   var $j = jQuery.noConflict();
   $j(document).ready(function () {
