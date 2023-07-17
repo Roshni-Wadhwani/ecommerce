@@ -135,6 +135,7 @@
   });
   $(document).on("click", ".divpr button.minus", function () {
     a = this.id.slice(7);
+    console.log("a: ", this.id);
     cart["pr" + a][0] = cart["pr" + a][0] - 1;
     cart["pr" + a][0] = Math.max(0, cart["pr" + a][0]);
     document.getElementById("valpr" + a).innerHTML = cart["pr" + a][0];

@@ -10,25 +10,11 @@ from store.models import order, product, orderTracker
 from . import forms, models
 import store
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 
-# def signUp(request):
-#     return HttpResponse("SignUP page")
-# def logout(request):
-#     return HttpResponse("SignUP page")
-# def cart(request):
-#     return HttpResponse("SignUP page")
-# def checkOut(request):
-#     return HttpResponse("SignUP page")
-# def store(request):
-#     return HttpResponse("SignUP page")
-# def order(request):
-#     return HttpResponse("SignUP page")
 
 
 def loginPage(request):
     form = forms.LoginForm()
-    message = ''
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
         if form.is_valid():
