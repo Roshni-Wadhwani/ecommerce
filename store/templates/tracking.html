@@ -59,11 +59,11 @@
       data: formData,
       encode: true,
     }).done(function (data) {
-      console.log("initial", data);
+      // console.log("initial", data);
       data = JSON.parse(data);
-      console.log("final:", data);
+      // console.log("final:", data);
       updates = data[0];
-      console.log("updates: ", updates);
+      // console.log("updates: ", updates);
       if ((updates.length > 0) & (updates != {})) {
         for (i = 0; i < updates.length; i++) {
           let time = updates[i]["time"];

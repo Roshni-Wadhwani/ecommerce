@@ -1,17 +1,11 @@
 import json
 from django.contrib import messages
-import re
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
-from django.views import View
-from django.contrib.auth.hashers import make_password
 from store.models import order, product, orderTracker
-from . import forms, models
-import store
+from . import forms
 from django.contrib.auth.decorators import login_required
-
-
 
 def loginPage(request):
     form = forms.LoginForm()
@@ -23,8 +17,6 @@ def loginPage(request):
             user = authenticate(username=uname, password=pas)
             if user is not None:
                 login(request, user)
-                # messages.success(
-                #     request, f'Hello! {uname} You have been logged in')
                 return redirect('homepage')
             else:
                 messages.error(request, 'Login Failed!')
@@ -48,7 +40,6 @@ def signupPage(request):
             messages.success(request, 'Woho!!! Registration Successfull!!')
             return redirect('login')
         else:
-            print(form.errors)
             messages.error(request, 'Registration failed!')
     return render(request, '../templates/signup.html', context={'form': form})
 

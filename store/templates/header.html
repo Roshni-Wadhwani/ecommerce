@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{% static 'basic2.css' %}" />
     <script
       src="https://code.jquery.com/jquery-3.7.0.js"
       integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Bootstrap demo</title>
@@ -68,8 +66,7 @@
               title="Items in your cart"
               data-placement="bottom"
               style="padding: 10px; margin: 4px"
-              html="true"
-            >
+              html="true">
               Cart(<span id="navCart">0</span>)
             </button>
           </li>
@@ -95,8 +92,7 @@
         <form
           class="navbar-form navbar-left"
           action="/store/search/"
-          method="post"
-        >
+          method="post">
           {% csrf_token %}
           <div class="input-group">
             <input
@@ -104,14 +100,12 @@
               class="form-control"
               placeholder="Search"
               name="search"
-              value="{{query}}"
-            />
+              value="{{query}}" />
             <div class="input-group-btn">
               <button
                 class="btn btn-primary"
                 style="height: 35px"
-                type="submit"
-              >
+                type="submit">
                 <i class="glyphicon glyphicon-search"></i>
               </button>
             </div>
