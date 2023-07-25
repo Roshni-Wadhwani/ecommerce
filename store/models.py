@@ -14,34 +14,7 @@ class category(models.Model):
         return self.name
 
 
-class customer(models.Model):
-    username = models.CharField(max_length=50, null=False, blank=False)
-    phone = models.CharField(max_length=10, null=False, blank=False)
-    email = models.EmailField(null=False, blank=False)
-    password = models.CharField(max_length=100, blank=False, null=False)
 
-    def register(self):
-        self.save()
-
-    def get_customer_by_username(username):
-        try:
-            return customer.objects.get(username=username)
-        except:
-            return False
-
-    def get_customer_by_password(password):
-        try:
-            return customer.objects.get(password=password)
-        except:
-            return False
-
-    def ifExists(username):
-        if customer.objects.filter(username=username):
-            return True
-        return False
-
-    def __str__(self):
-        return self.username
 
 
 class product(models.Model):

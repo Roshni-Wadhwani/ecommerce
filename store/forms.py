@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from store import models
 
-from store.models import customer
 
 
 # Create your forms here.
