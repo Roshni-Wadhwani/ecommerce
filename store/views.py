@@ -7,6 +7,7 @@ from store.models import order, product, orderTracker
 from . import forms
 from django.contrib.auth.decorators import login_required
 
+
 def loginPage(request):
     form = forms.LoginForm()
     if request.method == 'POST':
@@ -117,7 +118,7 @@ def orderTrack(request):
         # print(orderId)
         try:
             orders = order.objects.filter(order_id=orderid)
-            # print("orders:", orders)
+            print("orders:", orders[0])
             if len(orders) > 0:
                 update = orderTracker.objects.filter(orderId=orderid)
                 updates = []
@@ -131,7 +132,6 @@ def orderTrack(request):
             else:
                 return HttpResponse('{}')
         except Exception as exception:
-            # print(exception)
+            print(exception)
             return HttpResponse("exception")
-
     return render(request, '../templates/tracking.html')

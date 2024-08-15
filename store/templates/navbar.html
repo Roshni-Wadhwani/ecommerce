@@ -21,7 +21,7 @@
             {{i.name}}
           </h5>
           <h5 class="card-text" style="text-align: center" id="pricepr{{i.id}}">
-            {{i.price}}
+            Rs. {{i.price}}
           </h5>
           <button
             type="button"
@@ -126,8 +126,10 @@
       qty = 1;
       name = document.getElementById("name" + idstr).innerHTML;
       price = document.getElementById("price" + idstr).innerHTML;
-      console.log(price);
+      console.log("init price: ", price);
+      price = extractAmount(price);
       cart[idstr] = [qty, name, parseInt(price)];
+      // console.log(price);
     }
     updateCart(cart);
     updatePopover(cart);
@@ -135,7 +137,7 @@
   });
   $(document).on("click", ".divpr button.minus", function () {
     a = this.id.slice(7);
-    console.log("a: ", this.id);
+    // console.log("a: ", this.id);
     cart["pr" + a][0] = cart["pr" + a][0] - 1;
     cart["pr" + a][0] = Math.max(0, cart["pr" + a][0]);
     document.getElementById("valpr" + a).innerHTML = cart["pr" + a][0];
@@ -151,5 +153,14 @@
     updatePopover(cart);
     $("#popoverCart").popover("hide");
   });
+  function extractAmount(inputString) {
+    const pattern = /Rs\.\s*(.+)/i;
+    const match = inputString.match(pattern);
+    if (match && match[1]) {
+      return match[1].trim();
+    } else {
+      return null;
+    }
+  }
 </script>
 {% endblock extra %}

@@ -135,7 +135,7 @@
       totalPrice += qty * price;
       str = `${
         qty != 0
-          ? `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-primary rounded-pill">${qty}</span></li>`
+          ? `<li class="list-group-item d-flex justify-content-between align-items-center">${name}<span class="badge bg-secondary squared-pill">${price}</span><span class="badge bg-primary rounded-pill">${qty}</span></li>`
           : ""
       }`;
 
@@ -147,9 +147,7 @@
   $("#itemsJSON").val(JSON.stringify(cart));
   function func() {
     document.getElementById("gridCheck").checked
-      ? alert(
-          "Thanks for ordering with us....Your id is {{orders}} use it to track your order"
-        )
+      ? alert("Thanks for ordering with us...")
       : alert("Please read terms and conditions");
   }
   var $j = jQuery.noConflict();
